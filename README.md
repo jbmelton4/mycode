@@ -3,6 +3,8 @@ Trac# mycode (Learn Gud)
 
 A project desciption is supposed to go here but really just messing around while following tutorials and such as I attempt to learn this.
 
+And now I have a project description through the terminal. So, yeah, let's see how that goes.
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine
