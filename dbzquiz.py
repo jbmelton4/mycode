@@ -141,4 +141,13 @@ if user_total in range(10,18):
    print ("Congrats! You are...Yamcha. Huh. Bro, why are you even here? You were pretty cool back in the day but you got quickly overshadowed by your friends. Even that weird bald kid ended up surpassing you. I'd say you did pretty well on the love front but a spikey-headed alien stole your girl. You're pretty good at sports, you have a weird relationship with your cat, but at least you're better than the average joe.")
 
 elif user_total in range(19,28):
+    print ("You are Gohan. That's cool, nerd. You're intelligent, diligent, and a bit of a dweeb but that's okay. You have everyone's best interests at heart! You were one of the most powerful beings in the known universe. Most people peak in their 30s or 40s but you peaked at 10...it was pretty much all downhill from there on the whole 'strongest on the earth' front. It's okay though, just go home and be a family man.")
+
+elif user_total in range(29,38):
+    print ("Congrats! You are Piccolo! I am green with envy. Har har. Seriously though, it's not easy being green. You're stoic, calm, and a natural born teacher. Your dad was kind of a prick and you started off down the same path before you found your way. It only took the friendship of a small boy and absorbing several of your species into your conciousness to put you on the path of good! Um...well, anyways, good job!")
+
+elif user_total in range(39,44):
+    print ("All hail the might Prince of all Saiyans, Vegeta! You are a person of sm...mighty stature! Sure, you have a serious anger problem but you're dedicated as hell. Seriously, you had more character development than the main protagonist. Don't feel bad you'll never surpass them, Akira Toriyama hates you and only uses you begrudgingly to make the main character look good. Hey, you love your family and have found a home where you least expected it. Plus your spouse is loaded, so at least you don't have to worry about paying for anything ever.")
+
+elif user_total in range 45,51):
     print ("Congrats! You are Gohan.")
