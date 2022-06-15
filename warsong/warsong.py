@@ -47,16 +47,15 @@ def save():
     while mainMenu:
         print('''  
         
-                 ( WARSONG )  
-
-    -------------------------------------
-    |             MAIN MENU             |
-    |                                   |
-    |             NEW GAME              |
-    |             LOAD GAME             |
-    |             QUIT GAME             |
-    |                                   |
-    ------------------------------------- ''')
+                                ( W A R S O N G )  
+                    -------------------------------------
+                    |             MAIN MENU             |
+                    |                                   |
+                    |             NEW GAME              |
+                    |             LOAD GAME             |
+                    |             QUIT GAME             |
+                    |                                   |
+                    ------------------------------------- ''')
                 
         choice = input("> ").lower
 
@@ -264,7 +263,7 @@ def warsong():
     showInstructions()  # show instructions to the player
 
     while True:   # MAIN INFINITE LOOP
-        #### Player Stamina, End Game       
+        #### Player Stamina ---> End Game       
         if player_stamina <= -1:
             os.system("clear")
             print('\nExhausted, you feel have done all you could for today and head to the village inn. You wonder if you should press on ahead in the morning or abandon your quest...\n')
@@ -386,14 +385,14 @@ def warsong():
                 del rooms[currentRoom]['ability']
 
             else:
-                print('Seems you can\'t travel in that direction ' + (move[1].upper()) + '.')
+                print('Seems that the ' + (move[1].capitalize()) + 'didn\'t appreciate you being so handsy.')
 
         # Let's you view the decription of your current room.
         if move[0] == 'look':
             if 'desc' in rooms[currentRoom]:
                 print(rooms[currentRoom]['desc']) # print the look description
             else:
-                print('Your vision is a little hazy right now. You should have listened to your squire, ten pints was perhaps a tad too much.')
+                print('Your vision is a little hazy right now. You should have listened to your squire, ten pints was perhaps a tad too much last night.')
 
         # Help command for showing instructions
         elif move[0] == 'help':
