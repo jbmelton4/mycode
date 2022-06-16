@@ -1,5 +1,10 @@
 #!/usr/bin/python3
 
+'''WARSONG'''
+'''An text adventure that has you gathering heroes and items to defeat the monster in the local area
+Coded: James Melton
+Lesson Credits: Chad Feeser Project 2, Tech with Tim Youtube'''
+
 # Imports
 from random import randint
 import sys
@@ -116,8 +121,6 @@ rooms = {
                 }
             }
 
-currentRoom = 'VILLAGE'   # player start location
-
 #### Defined Functions ####
 
 # The intro should the user wish to play
@@ -186,8 +189,15 @@ def showStatus():
             print('You have met the mystical ' + rooms[currentRoom]['npc'] + rooms[currentRoom]['npc_status'] + '!\n')
 
 
-                                            #### MAIN GAME LOOP #####
+#### MAIN GAME LOOP #####
 def warsong():
+    global inventory
+    global abilities
+    global party
+    global player_stamina
+    global rooms
+    global item
+    global currentRoom
     os.system('clear')
     '''Warsong, a game where you recruit adventurers as you head towards the goblin lair to defeat them.'''
     #### Title and Start Game ####
@@ -208,7 +218,6 @@ def warsong():
 
     currentRoom = 'VILLAGE'   # player start location
         
-
     os.system('clear') # start game with a fresh screen
     intro() # kinda gives the starting background
     showInstructions()  # show instructions to the player
@@ -217,7 +226,7 @@ def warsong():
         #### Player Stamina ---> End Game       
         if player_stamina <= -1:
             os.system("clear")
-            print('\nExhausted, you feel have done all you could for today and head to the village inn. You wonder if you should press on ahead in the morning or abandon your quest...\n')
+            print('\nExhausted, you feel you have done all you could for today and head to the village inn. You wonder if you should press on ahead in the morning or abandon your quest...\n')
             print("Would you like to quit? [Q] | View your final statistics? [STATS] | Or move on to the next chapter? [ONWARD]\n")
             quit_query = input('>>')
             if quit_query.lower() in ['q', 'quit']:
@@ -288,7 +297,7 @@ def warsong():
         if move[0] == 'recruit':
             if 'hero' in rooms[currentRoom] and move[1] in rooms[currentRoom]['hero']:
                 party += [move[1]] # add hero to party
-                print(crayons.cyan('\nThe ' + move[1].capitalize() + ' has decided to join you!\n', bold=True)) # msg saying you received the hero
+                print(crayons.cyan('\nThe ' + move[1].capitalize() + ' has decided to join you! Huzzah!\n', bold=True)) # msg saying you received the hero
                 #stat_trackerH += 1 # Adds to the stat tracker
                 del rooms[currentRoom]['hero'] # deletes that hero from the dictionary
             else:
@@ -297,15 +306,15 @@ def warsong():
         # Using the heroes. Need to figure out how to use them as "keys". Take a look at sprite.
         if move[0] == 'command':
             if move[1].lower() == 'squire' in party:
-                print()
+                print("The Squire doesn't know what you want them to do.")
             if move[1].lower() == 'knight' in party:
-                print()
+                print("The Knight doesn't know what you want them to do.")
             if move[1].lower() == 'ranger' in party:
-                print()
+                print("The Ranger doesn't know what you want them to do.")
             if move[1].lower() == 'cursehunter' in party:
-                print()
+                print("The Cursehunter doesn't know what you want them to do.")
             if move[1].lower() == 'cleric' in party:
-                print()
+                print("You shouldn't be able to command them...")
 
         # Using items in your inventory.
         if move[0] == 'use':
