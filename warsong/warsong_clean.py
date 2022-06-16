@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+# Imports
 from random import randint
 import sys
 import time
@@ -8,199 +9,45 @@ import os.path
 import textwrap
 import crayons
 
+ #### Values #####
+
 # Time (seconds)
 t1 = 0.5
 t2 = 3
 t3 = 6
 
-# Record of if player gathered all the items/abilities, recruited all the heroes, and if the monster was defeated.
-# !!!!! Doesn't like this, gotta figure out a way to add to this. Maybe look up something about 'increasing scores'?
-#def stat_tracker():
-#    stat_trackerH = 1 # Shows how many heroes you've recruited
-#    stat_trackerA = 0 # Shows how many abilities you've unlocked
-#    stat_trackerI = 0 # Shows how many items you've received
-#    boss_defeated = 0 # Shows if you've defeated the boss
-#    print("Something something darkside")
+# List of party members and their health total
+heroes = {
+            'Squire': {'health' : 1},
+            'Knight': {'health' : 2},
+            'Ranger': {'health' : 2},
+            'Cursehunter':{'health' : 2},
+            'Cleric': {'health' : 2}
+        }
 
-#### Save Function ####
-# !!!!! Not working as intended. I'll try putting a load game function into the START GAME prompt instead. Doesn't work as intended anyways, dang.
-def save():
-    list = [
-                player_stamina,
-                inventory,
-                party,
-                abilities, 
-                rally_use
-            ]
-    f = open("load_game.txt", "w")
+# List of monsters and damage total
+monster = [{'name' : 'Werewolf', 'damage' : 1}]
 
-    for item in list:
-        f.write(item + "\n")
-    f.close
+# List of NPC
+npc = [{'name' : 'Fairy Queen'}]
 
-    ##### Main Menu #####
-    # !!!!! Broken. Skips straight to the START GAME bit. Hmmmm....I should figure out how to merge the two instead of making multiple menus, that's annoying.
-    #def mainMenu():
-    os.system('clear')
-    while mainMenu:
-        print('''  
-        
-                                ( W A R S O N G )  
-                    -------------------------------------
-                    |             MAIN MENU             |
-                    |                                   |
-                    |             NEW GAME              |
-                    |             LOAD GAME             |
-                    |             QUIT GAME             |
-                    |                                   |
-                    ------------------------------------- ''')
-                
-        choice = input("> ").lower
+# Listing the different items
+items = [{'name' : 'sprite'},
+        {'name' : 'jeweled dagger'}]
 
-        if choice == "new game" or "new":
-            intro()
+# List of abilities
+ability = [{'name' : 'rally'},
+           {'name' : 'remove curse'}]
 
-        elif choice == "load game" or "load":
-            f = open("load_game.txt", "r")
-            load_list = f.readline()
-            player_stamina = [0][:-1]
-            inventory = [1][:-1]
-            party = [2][:-1]
-            abilities = [3][:-1]
-            rally_use = [4][:-1]
-            print(player_stamina, inventory, party, abilities, rally_use)
-            print("Welcome back, Commander!")
-            warsong()
+# Player Resources
+player_stamina = 5
+inventory = []
+party = ['squire']
+abilities = []
+rally_use = 1
 
-        elif choice == "quit":
-            sys.exit()
-
-    #### GAME INTRO ####
-def intro():
-    #   print()
-    #   time.sleep(t2)
-    #   print("You are a loyal retainer of the kingdom, having served many years hunting down and routing vile creatures.")
-    #   print()
-    #   time.sleep(t1)
-    #   print("Having earned the title of Commander, you were assigned to the countryside and have been tasked with eradicating a vicious goblin tribe!")
-    #   print()
-    #   time.sleep(t1)
-    #   print("Not the most desirable job for a new Commander but keeping the people safe would earn you favor and fortune with your king.")
-    #   print()
-    #   time.sleep(t1)
-    #   print("Your only companion being a young squire, you set off towards the ancient fortress with an aim to recruit adventurers along the way!")
-    #   print()
-       time.sleep(t1)
-
-
-def showInstructions():
-        print('''
-    TIP #1: Watch your stamina. Maybe there is a way to replenish it...
-    TIP #2: Command your party members to help you with things. Ask them what you should do next.
-
-    -------------------------------------
-    |             Actions:              |
-    |    GO [north, south, east, west]  |
-    |    GET [item, ability]            |
-    |    USE [item, ability]            |
-    |    RECRUIT [hero]                 |
-    |    COMMAND [hero]                 |
-    |    LOOK                           |
-    -------------------------------------
-    Type 'help' at any time! Type 'q' to quit! ''')
-
-def playerinfo():
-        #print('')
-        #print('YOU ARE IN THE ' + currentRoom + '.')
-        print()
-        print('=================================')
-        print('Inventory :', str(inventory))
-        print('Ability :', str(abilities))
-        print('Party :', str(party))
-        print('Stamina :', str(player_stamina))
-        print('=================================')
-        #print(rooms[currentRoom]['desc'])
-        print()
-
-
-def showStatus(): 
-    # display the player's status
-    # if 'desc' in rooms[currentRoom]:
-    # print(rooms[currentRoom]['desc'])
-        
-        if 'item' in rooms[currentRoom]:
-            print('You see a ' + rooms[currentRoom]['item'] + rooms[currentRoom]['item_status'] + '.\n')
-        if 'ability' in rooms[currentRoom]:
-            print('The area around you sparks a memory from your past, ' + rooms[currentRoom]['ability_status'] + '.\n')
-        if 'hero' in rooms[currentRoom]:
-            print('You have met a ' + rooms[currentRoom]['hero'].capitalize() + rooms[currentRoom]['hero_status'] + '.\n')
-        if 'monster' in rooms[currentRoom]:
-            print('You have encountered a ' + rooms[currentRoom]['monster'].upper() + rooms[currentRoom]['mon_status'] + '!\n')
-        if 'npc' in rooms[currentRoom]:
-            print('You have met the mystical ' + rooms[currentRoom]['npc'] + rooms[currentRoom]['npc_status'] + '!\n')
-
-        #print('=================')
-
-
-def warsong():
-    global inventory
-    global abilities
-    global party
-    global player_stamina
-    global rooms
-    global item
-    global currentRoom
-    os.system('clear')
-    '''Warsong, a game where you recruit adventurers as you head towards the goblin lair to defeat them.'''
-                                                    #### Title and Start Game ####
-
-    print("                                                -----------"     )
-    print("                                               |  WARSONG  |"    )
-    print("                                                -----------"     )
-    print("You must travel to the the ancient fortress to face an evil goblin tribe. You must gather items and recruit adventurers to emerge triumphant!\n")
-    print()
-  
-    # Start Game
-    startGame = input("Would you like to start your adventure? (Y/N): \n").lower()
-    if startGame == 'y' or startGame == 'yes':
-        intro()
-    else:
-        print("Probably for the best, the journey is only for the brave and bold.\n")
-        sys.exit()
-
-
-     # Listing the different party members you can recruit, their health, and certain responses to what happens when issuing COMMAND on them.
-    heroes = {
-               'Squire': {'health' : 1},
-               'Knight': {'health' : 2},
-               'Ranger': {'health' : 2},
-               'Cursehunter':{'health' : 2},
-               'Cleric': {'health' : 2}
-               }
-    # List of monsters
-    monster = [{'name' : 'Werewolf', 'damage' : 1}]
-
-    # List of NPC
-    npc = [{'name' : 'Fairy Queen'}]
-
-    # Listing the different items
-    items = [{'name' : 'sprite'},
-            {'name' : 'jeweled dagger'}]
-
-    # List of abilities
-    ability = [{'name' : 'rally'},
-            {'name' : 'remove curse'}]
-
-    #### Player Resources ####
-    player_stamina = 5
-    inventory = []
-    party = ['squire']
-    abilities = []
-    rally_use = 1
-
- 
-
-    rooms = {
+# List of rooms as well as their decriptions, item/desc, hero/desc, ability/desc, etc
+rooms = {
             'VILLAGE' : {
                 'north' : 'GNARLED TREE',
                 'west' : 'CENTRAL FOREST',
@@ -268,6 +115,96 @@ def warsong():
                 'desc' : 'The north forest is pretty quiet, you get a sense of being watched but you don\'t feel threatened by it. You sense a warm, peaceful sensation pulling you to the west but see no path ahead. To the east lay the gnarled tree, howling still echoing in the distance. South leads you to the center of the forest.' 
                 }
             }
+
+currentRoom = 'VILLAGE'   # player start location
+
+#### Defined Functions ####
+
+# The intro should the user wish to play
+def intro():
+    #   print()
+    #   time.sleep(t2)
+    #   print("You are a loyal retainer of the kingdom, having served many years hunting down and routing vile creatures.")
+    #   print()
+    #   time.sleep(t1)
+    #   print("Having earned the title of Commander, you were assigned to the countryside and have been tasked with eradicating a vicious goblin tribe!")
+    #   print()
+    #   time.sleep(t1)
+    #   print("Not the most desirable job for a new Commander but keeping the people safe would earn you favor and fortune with your king.")
+    #   print()
+    #   time.sleep(t1)
+    #   print("Your only companion being a young squire, you set off towards the ancient fortress with an aim to recruit adventurers along the way!")
+    #   print()
+       time.sleep(t1)
+
+# Instructions for the player.
+def showInstructions():
+        print('''
+    TIP #1: Watch your stamina. Maybe there is a way to replenish it...
+    TIP #2: Command your party members to help you with things. Ask them what you should do next.
+
+    -------------------------------------
+    |             Actions:              |
+    |    GO [north, south, east, west]  |
+    |    GET [item, ability]            |
+    |    USE [item, ability]            |
+    |    RECRUIT [hero]                 |
+    |    COMMAND [hero]                 |
+    |    LOOK                           |
+    -------------------------------------
+    Type 'help' at any time! Type 'q' to quit! ''')
+
+# Shows your player information, inventory, stamina, etc.
+def playerinfo():
+        #print('')
+        #print('YOU ARE IN THE ' + currentRoom + '.')
+        print()
+        print('=================================')
+        print('Inventory :', str(inventory))
+        print('Ability :', str(abilities))
+        print('Party :', str(party))
+        print('Stamina :', str(player_stamina))
+        print('=================================')
+        #print(rooms[currentRoom]['desc'])
+        print()
+
+# Description of events and status in [currentRoom]
+def showStatus(): 
+    # display the player's status
+    # if 'desc' in rooms[currentRoom]:
+    # print(rooms[currentRoom]['desc'])
+        
+        if 'item' in rooms[currentRoom]:
+            print('You see a ' + rooms[currentRoom]['item'] + rooms[currentRoom]['item_status'] + '.\n')
+        if 'ability' in rooms[currentRoom]:
+            print('The area around you sparks a memory from your past, ' + rooms[currentRoom]['ability_status'] + '.\n')
+        if 'hero' in rooms[currentRoom]:
+            print('You have met a ' + rooms[currentRoom]['hero'].capitalize() + rooms[currentRoom]['hero_status'] + '.\n')
+        if 'monster' in rooms[currentRoom]:
+            print('You have encountered a ' + rooms[currentRoom]['monster'].upper() + rooms[currentRoom]['mon_status'] + '!\n')
+        if 'npc' in rooms[currentRoom]:
+            print('You have met the mystical ' + rooms[currentRoom]['npc'] + rooms[currentRoom]['npc_status'] + '!\n')
+
+
+                                            #### MAIN GAME LOOP #####
+def warsong():
+    os.system('clear')
+    '''Warsong, a game where you recruit adventurers as you head towards the goblin lair to defeat them.'''
+    #### Title and Start Game ####
+
+    print("                                                -----------"     )
+    print("                                               |  WARSONG  |"    )
+    print("                                                -----------"     )
+    print("You must travel to the the ancient fortress to face an evil goblin tribe. You must gather items and recruit adventurers to emerge triumphant!\n")
+    print()
+  
+    # Start Game
+    startGame = input("Would you like to start your adventure? (Y/N): \n").lower()
+    if startGame == 'y' or startGame == 'yes':
+        intro()
+    else:
+        print("Probably for the best, the journey is only for the brave and bold.\n")
+        sys.exit()
 
     currentRoom = 'VILLAGE'   # player start location
         
@@ -448,3 +385,17 @@ def warsong():
                 pass
 
 warsong()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
