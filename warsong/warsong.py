@@ -178,13 +178,13 @@ def warsong():
 
 
      # Listing the different party members you can recruit, their health, and certain responses to what happens when issuing COMMAND on them.
-    heroes = [{
+    heroes = {
                'Squire': {'health' : 1},
                'Knight': {'health' : 2},
                'Ranger': {'health' : 2},
                'Cursehunter':{'health' : 2},
                'Cleric': {'health' : 2}
-               }]
+               }
     # List of monsters
     monster = [{'name' : 'Werewolf', 'damage' : 1}]
 
@@ -296,10 +296,12 @@ def warsong():
                 sys.exit() # Need to change that to second chapter route. I need it to save your data to move to second part.
             if quit_query.lower() in ['stats']:
                 stat_tracker() #Show how many items/heroes were collected and if werewolf was defeated.
+                input("Press enter to continue")
+                continue
             if quit_query.lower() in ['r', 'retry']:
                 warsong() # I think this restarts the game
         if player_stamina <= 0:
-            print(crayon.red('\nYou are starting to feel tired. If only there was a way to press onward...\n', bold=True))
+            print(crayons.red('\nYou are starting to feel tired. If only there was a way to press onward...\n', bold=True))
         
         playerinfo()
         showStatus()
