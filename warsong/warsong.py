@@ -25,12 +25,12 @@ t3 = 6
 
 # Record of if player gathered all the items/abilities, recruited all the heroes, and if the monster was defeated.
 # !!!!! Doesn't like this, gotta figure out a way to add to this. Maybe look up something about 'increasing scores'?
-#def stat_tracker():
-#    stat_trackerH = 1 # Shows how many heroes you've recruited
-#    stat_trackerA = 0 # Shows how many abilities you've unlocked
-#    stat_trackerI = 0 # Shows how many items you've received
-#    boss_defeated = 0 # Shows if you've defeated the boss
-#    print("Something something darkside")
+def stat_tracker():
+    stH = 1 # Shows how many heroes you've recruited
+    stA = 0 # Shows how many abilities you've unlocked
+    stI = 0 # Shows how many items you've received
+    stB = 0 # Shows if you've defeated the boss
+    print(f"\nYou have recruited {stH}/5 heroes! You have collected {stI}/2 items! You have acquired {stA}/2 abilities! You defeated {stB}/1 bosses!\n")
 
 #### Save Function ####
 # !!!!! Not working as intended. I'll try putting a load game function into the START GAME prompt instead. Doesn't work as intended anyways, dang.
@@ -189,7 +189,7 @@ def warsong():
     monster = [{'name' : 'Werewolf', 'damage' : 1}]
 
     # List of NPC
-    npc = [{'name' : 'Fairy Queen'}]
+    #npc = [{'name' : 'Fairy Queen'}]
 
     # Listing the different items
     items = [{'name' : 'sprite'},
@@ -264,10 +264,8 @@ def warsong():
             'PEACEFUL GLADE' : {
                 'south' : 'SWAMP',
                 'east' : 'NORTH FOREST',
-                'desc' : 'You are in a serene glade, a babbling brook can be heard as the smell of the swamp is left behind and a scent of flowers hangs in the air. Small glowing sprites dart around, curious of your presence.',
-                'npc' : 'Fairy Queen',
-                'npc_status' : '! They know how to use -REMOVE CURSE- but seems suspicious of you. Perhaps one of your companions could sweet talk them'
-                },
+                'desc' : 'You are in a serene glade, a babbling brook can be heard as the smell of the swamp is left behind and a scent of flowers hangs in the air. Small glowing sprites dart around, curious of your presence. The Fairy Queen, a wielder of powerful magic, resides here and looks at you from her throne...',
+                                },
 
             'NORTH FOREST' : {
                 'south' : 'CENTRAL FOREST',
@@ -294,12 +292,15 @@ def warsong():
                 print("Farewell, thanks for playing!\n")
                 sys.exit()
             if quit_query.lower() in ['onward']:
+                print("Yeah, I haven't gotten that far. Thanks for playing!\n")
                 sys.exit() # Need to change that to second chapter route. I need it to save your data to move to second part.
             if quit_query.lower() in ['stats']:
                 stat_tracker() #Show how many items/heroes were collected and if werewolf was defeated.
-            if quit.query.lower() in ['r', 'retry']:
+            if quit_query.lower() in ['r', 'retry']:
                 warsong() # I think this restarts the game
-
+        if player_stamina <= 0:
+            print(crayon.red('\nYou are starting to feel tired. If only there was a way to press onward...\n', bold=True))
+        
         playerinfo()
         showStatus()
 
@@ -369,17 +370,30 @@ def warsong():
                         warsong()
             # If you use 'remove curse', the werewolf is cured and becomes a cleric that is instantly added to your party. Boss = dead
             if move == ['use', 'remove curse'] and 'remove curse' in abilities:
-                print("A bright light erupts from the werewolf! Faeries come from all over the forest, swirling around the howling creature!\n") 
-                print("Their body begins to twist and distort, bones snap and the muscles contort and shrink. One more burst of light explodes outward, the faeries flying into the sky and dissapearing.\n")
-                print("The now human figure falls to the ground. They look at their body, overjoyed they are human once again! They are a holy Cleric and insist on joining your quest!\n")
+                print1by1("A bright light erupts from the werewolf! Faeries come from all over the forest, swirling around the howling creature!\n")
+                print() 
+                print1by1("Its body begins to twist and distort, bones snap and the muscles contort and shrink. One more burst of light explodes outward, the faeries flying into the sky and disappearing!\n")
+                print()
+                print1by1("The now human figure falls to the ground. They look at their body, elated they are human once again! They are a holy Cleric and insist on joining your quest!\n")
+                print()
                 if 'cursehunter' in party:
-                    print("The Cursehunter is overjoyed that their sibling is safe and sound!\n")
+                    print1by1("The Cursehunter is overjoyed that their sibling is safe and sound!\n")
+                    print()
+                if 'knight' in party:
+                    print1by1('The Knight clasps you on the back for a job well done!\n')
+                    print()
+                if 'ranger' in party:
+                    print1by1('The Ranger nods under his hood, as if it was his plan all along.\n')
+                    print()
+                if 'squire' in party:
+                    print1by1('The squire is just happy to be here!\n')
+                    print()    
+                time.sleep(4)
                 del rooms[currentRoom]['monster']
                 party.append('cleric')
-                inventory.add('jeweled dagger')
+                inventory.append('jeweled dagger')
 
-
-
+        
     #### Commands [Recruit, Command, Go, Get, Use, Look, Super Secret Commands]
         # !!!! Trying to make it to where using wrong command on them triggers an invalid response. Need to do the same for use on something not in your inventory.
         if move[0] == 'recruit':
@@ -397,12 +411,12 @@ def warsong():
                     
                 #SQUIRE COMMANDS
                 if move[1].lower() == 'squire' and currentRoom == 'VILLAGE' and 'squire' in party:
-                    print("\nYou command the squire to fetch supplies! Unfortunately they meet their soul mate and decide to run off together, leaving you to your silly quest. You curse the knave but hope they has a wonderful life.\n")
+                    print("\nYou command the squire to fetch supplies! Unfortunately they fall in love with a cabbage farmer and run off together, leaving you to your silly quest.\n")
                     print(crayons.magenta("\nYour squire has found true love and abandoned the quest!", bold=True))
                     party.remove('squire')
                 elif move[1].lower() == 'squire' and currentRoom == 'SWAMP' and 'squire' in party:
-                    print("\nThe squire moves to find a way through the swamp but is suddenly pulled underwater by a snake! They both disappear beneath the water's surface, never to be seen again.\n")
-                    print(crayons.red("\nYour squire has been swallowed whole by a snake!", bold=True))
+                    print("\nThe squire moves through the swamp but is knocked into quicksand by a rodent of unusual size!\n")
+                    print(crayons.red("\nYour squire has been swallowed up by the quicksand!", bold=True))
                     party.remove('squire')
                 elif move[1].lower() == 'squire' and currentRoom == 'CENTRAL FOREST' and 'squire' in party:
                     print("\nThe squire says some inappropriate things to the Cursehunter. The Cursehunter whispers something in the squire's ear and they turn pale before running off in fear!\n")
@@ -418,39 +432,36 @@ def warsong():
                     party.remove('squire')
                 elif move[1].lower() == 'squire' and currentRoom == 'NORTH FOREST' and 'squire' in party:
                     print("\nYou decide to teach your squire a few tactics and strategies. They seem eager to learn and their eyes shine with wonder as you regale them with tales of your past.\n")
-                elif move[1].lower() == 'squire' and 'squire' not in party:
-                    print("\nYou don't have the squire in your party.") 
+                
 
                 #KNIGHT COMMANDS
                 if move[1].lower() == 'knight' and currentRoom == 'PEACEFUL GLADE' and 'knight' in party:
                     print("\nThe old knight kneels before the Fairy Queen, asking for their assistance. She kindly dismisses them but the knight does look younger than they did before.\n")
-                elif move[1].lower() == 'knight' and 'knight' not in party:
-                    print("\nYou don't have the Knight in your party.")
+                
 
                 #RANGER COMMANDS
                 if move[1].lower() == 'ranger' and currentRoom == 'PEACEFUL GLADE' and 'ranger' in party:
                     print("\nThe ranger offers a smolder to the Fairy Queen and their wings flutter for a moment. After a few flirtatious compliments between them, she agrees to teach you the REMOVE CURSE ability!\n")
+                    print(crayons.yellow('\nYou have unlocked the Remove Curse ability!\n', bold=True))
                     abilities.append('remove curse')
                 elif move[1].lower() == 'ranger' and currentRoom == 'SWAMP' and 'ranger' in party and 'squire' not in party:
-                    print("\nThe ranger grabs a rope, ties it to a tree and jumps in the water! After a moment they come back up, bringing back your squire who is gasping for air. Praise the Ranger!\n")
+                    print(crayons.cyan("\nThe ranger grabs a rope, ties it to a tree and jumps in the quicksand! After a moment they come back up, bringing back your squire who is gasping for air. Praise the Ranger!\n", bold=True))
                     party.append('squire')
-                elif move[1].lower() == 'ranger' and 'ranger' not in party:
-                    print("\nYou don't have the Ranger in your party.")
+                
 
                 #CURSEHUNTER COMMANDS
                 if move[1].lower() == 'cursehunter' and currentRoom == 'PEACEFUL GLADE' and 'cursehunter' in party:
                     print("\nThe Cursehunter tells the Fairy Queen of their tale. A single tear falls from Fairy Queen's eye and she agrees teach you the REMOVE CURSE ability!\n")
+                    print(crayons.yellow('\nYou have unlocked the Remove Curse ability!\n', bold=True))
                     abilities.append('remove curse')
-                elif move[1].lower() == 'cursehunter' and 'cursehunter' not in party:
-                    print("\nYou don't have the Cursehunter in your party.")
-
+                
                 #CLERIC COMMANDS
                 if move[1].lower() == 'cleric' in party:
-                    print('"I kick ass for the lord!"')
-                elif move[1].lower() == 'cleric' and 'cleric' not in party:
-                    print("You've heard rumors of a cleric that passed by the village but that was months ago...\n")
+                    print('"Praise the Sun!"')
+                
             except:
                 print("Command who?")
+
         # Using items in your inventory.
         if move[0] == 'use':
 
@@ -459,7 +470,6 @@ def warsong():
             if move[1].lower() == 'sprite' and currentRoom == 'SWAMP' and 'sprite' in inventory:
                 print(crayons.blue("\nThe sprite shines a bright blue hue, beckoning you to follow it! A path opens up to the north...\n", bold=True))
                 rooms["SWAMP"]["north"] = "PEACEFUL GLADE"
-                inventory.remove ('sprite')
 
             #### JEWELED DAGGER ####
             # The jeweled dagger is needed to gain access to PEACEFUL GLADE from NORTH FOREST. 
@@ -482,8 +492,10 @@ def warsong():
             #### REMOVE CURSE  ####
             # ******* A secret ability. You need to use the ranger or cursehunter to convince the fairy queen to give you the ability.
             if move[1].lower() == 'remove curse' in abilities:
-                print(crayons.green("\nYou recite the magic words given to you by the Fairy Queen!\n", bold=True))
-
+                print(crayons.green("\nYou have successfully recited the magic words given to you by the Fairy Queen!\n", bold=True))
+            elif move[1].lower() == 'remove curse' and "remove curse" not in abilities:
+                print("\nYou have heard of such abilities before but have no idea how to use them.\n")    
+        
         # Acquiring items and abilities.
         if move[0] == 'get':
             if 'item' in rooms[currentRoom] and move[1] in rooms[currentRoom]['item']:
